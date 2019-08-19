@@ -128,10 +128,12 @@ function draw() {
 
     if (x + dx > canvas.width-ballDiameter) {
         gameOver();
+        x = canvas.width/2;
         counterP1 += 1;
         scoreP1.innerHTML = counterP1;
-    } else if (x + dx < 0) {
+    } else if (x + dx < 0+ballDiameter) {
         gameOver();
+        x = canvas.width/2;
         counterP2 += 1;
         scoreP2.innerHTML = counterP2;
     }
@@ -141,13 +143,13 @@ function draw() {
     }
 
     if (downPressed) {
-        palletY += 5;
+        palletY += 7;
         if (palletY + palletHeigth > canvas.height) {
             palletY = canvas.height - palletHeigth;
         }
     }
     else if (upPressed) {
-        palletY -= 5;
+        palletY -= 7;
         if (palletY < 0) {
             palletY = 0;
         }
@@ -159,7 +161,6 @@ function draw() {
 
 
 //          CALL FUNCTIONS           //
-
 
 
 startGame();

@@ -3,6 +3,13 @@
     padding: 0;
 }
 
-#canvas {
-    background-color: purple;
+.container {
+    width: 66%;
+    margin: 7% auto;
 }
+
+#myCanvas {
+    background-color: #000000;
+}
+
+

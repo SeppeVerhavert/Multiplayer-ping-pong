@@ -1,38 +1,103 @@
-var canvas = document.getElementById("myCanvas");
-var ctx = canvas.getContext("2d");
+let canvas = document.getElementById("myCanvas");
+let ctx = canvas.getContext("2d");
+let x = 0;
+let y = 0;
+let dx = 2;
+let dy = 2;
+let ballDiameter = 10;
+let palletY= 250;
+let palletwidth = 10;
+let palletHeigth = 100;
+let upPressed = false;
+let downPressed = false;
 
-// ctx.fillStyle = "#FFF";
-// ctx.fillRect(0, 0, 10, 10); 
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
 
-// ctx.fillRect(0, 0, 10, 50); 
-
-ctx.beginPath();
-ctx.rect(20, 40, 50, 50);
-ctx.fillStyle = "white";
-ctx.fill();
-ctx.closePath();
-
-
-
-ctx.beginPath();
-ctx.rect(160, 10, 100, 40);
-ctx.strokeStyle = "white";
-ctx.stroke();
-ctx.closePath();
-
-var x = canvas.width/2;
-var y = canvas.height-30;
-
-var dx = 2;
-var dy = -2;
-
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+function drawField() {
     ctx.beginPath();
-    ctx.arc(x, y, 10, 0, Math.PI*2);
+    ctx.rect(0, 0, 500, 500);
+    ctx.fillStyle = "red";
+    ctx.fill();
+    ctx.closePath();
+    
+    ctx.beginPath();
+    ctx.rect(500, 0, 500, 500);
+    ctx.fillStyle = "blue";
+    ctx.fill();
+    ctx.closePath();
+}
+
+function drawBall() {
+    ctx.beginPath();
+    ctx.rect(x, y, ballDiameter, ballDiameter);
     ctx.fillStyle = "white";
     ctx.fill();
     ctx.closePath();
+}
+
+function drawPallet1() {
+    ctx.beginPath();
+    ctx.rect(50, palletY, palletwidth, palletHeigth);
+    ctx.fillStyle = "white";
+    ctx.fill();
+    ctx.closePath();
+}
+
+function drawPallet2() {
+    ctx.beginPath();
+    ctx.rect(940, palletY, palletwidth, palletHeigth);
+    ctx.fillStyle = "white";
+    ctx.fill();
+    ctx.closePath();
+}
+
+function keyDownHandler(e) {
+    if(e.key == "Up" || e.key == "ArrowUp") {
+        upPressed = true;
+    }
+    else if(e.key == "Down" || e.key == "ArrowDown") {
+        downPressed = true;
+    }   
+}
+
+function keyUpHandler(e) {
+    if(e.key == "Up" || e.key == "ArrowUp") {
+        upPressed = false;
+    }
+    else if(e.key == "Down" || e.key == "ArrowDown") {
+        downPressed = false;
+    }
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawField();
+    drawBall();
+    drawPallet1();
+    drawPallet2();
+
+    if (x + dx > canvas.width-ballDiameter || x + dx < 2) {
+        dx = -dx;
+    }
+
+    if (y + dy > canvas.height-ballDiameter || y + dy < 2) {
+        dy = -dy;
+    }
+
+    if(downPressed) {
+        palletY += 5;
+        if (palletY + palletHeigth > canvas.height) {
+            palletY = canvas.height - palletHeigth;
+        }
+    }
+    else if(upPressed) {
+        palletY -= 5;
+        if (palletY < 0) {
+            palletY = 0;
+        }
+    }
+
     x += dx;
     y += dy;
 }

@@ -1,3 +1,6 @@
+//          VARIABLES           //
+
+
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 let x = 500;
@@ -12,9 +15,22 @@ let palletwidth = 10;
 let palletHeigth = 100;
 let upPressed = false;
 let downPressed = false;
+let scoreP1 = document.getElementById("scoreP1");
+let scoreP2 = document.getElementById("scoreP2");
+counterP1 = 0;
+counterP2 = 0;
+
+
+//          EVENTLISTENERS           //
+
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+
+
+//          FUNCTIONS           //
+
+//      DRAW OBJECTS       //
 
 function drawField() {
     ctx.beginPath();
@@ -54,6 +70,23 @@ function drawPallet2() {
     ctx.closePath();
 }
 
+//      RANDOM STARTING POINT        //
+
+function randomDirection() {
+    let randdx = Math.floor(Math.random() * 2);
+    let randdy = Math.floor(Math.random() * 2);
+    let randy = Math.floor(Math.random() * 500);
+    if (randdx > 0) {
+        dx = -dx;
+    }
+    if (randdy > 0) {
+        dy = -dy;
+    }
+    y = randy;
+}
+
+//      PLAYER MOVEMENT        //
+
 function keyDownHandler(e) {
     if(e.key == "Up" || e.key == "ArrowUp") {
         upPressed = true;
@@ -72,6 +105,8 @@ function keyUpHandler(e) {
     }
 }
 
+//      DRAW CANVAS       //
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawField();
@@ -89,9 +124,15 @@ function draw() {
         }
     } 
     
-    if (x + dx > canvas.width || x + dx < 0) {
-        alert("GAME OVER");
-        document.location.reload();
+    if (x + dx > canvas.width) {
+        counterP1 += 1;
+        scoreP1.innerHTML = counterP1;
+        // document.location.reload();
+        clearInterval(interval);
+    } else if (x + dx < 0) {
+        counterP2 += 1;
+        scoreP2.innerHTML = counterP2;
+        // document.location.reload();
         clearInterval(interval);
     }
     
@@ -116,4 +157,9 @@ function draw() {
     y += dy;
 }
 
-setInterval(draw, 10);
+
+//          CALL FUNCTIONS           //
+
+
+randomDirection();
+let interval = setInterval(draw, 10);

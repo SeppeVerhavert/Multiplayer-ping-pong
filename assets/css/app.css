@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -6,10 +8,39 @@
 .container {
     width: 66%;
     margin: 7% auto;
+    box-sizing: border-box;
 }
 
 #myCanvas {
     background-color: #000000;
+    align-content: center;
+}
+
+.score {
+    text-align: center;
+    position: absolute;
+    margin-top: 0px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 3rem;
+    color: white;
+}
+
+#scoreP1 {
+    width: 500px;
+}
+
+#scoreP2 {
+    width: 1500px;
+}
+
+#timer {
+    text-align: center;
+    position: absolute;
+    width: 1000px;
+    margin-top: 5%;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 20rem;
+    color: white;
 }
 
 

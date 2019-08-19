@@ -2,8 +2,8 @@ let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 let x = 0;
 let y = 0;
-let dx = 2;
-let dy = 2;
+let dx = 5;
+let dy = 5;
 let ballDiameter = 10;
 let palletY= 250;
 let palletwidth = 10;
@@ -77,11 +77,20 @@ function draw() {
     drawPallet1();
     drawPallet2();
 
-    if (x + dx > canvas.width-ballDiameter || x + dx < 2) {
-        dx = -dx;
+    if (x + dx === 50) {
+        if (y > palletY && y < palletY + palletHeigth) {
+            dx = -dx;
+        }
     }
 
-    if (y + dy > canvas.height-ballDiameter || y + dy < 2) {
+    if (x + dx === 940) {
+        if (y > palletY && y < palletY + palletHeigth) {
+            dx = -dx;
+        }
+    }
+    
+
+    if (y + dy > canvas.height || y + dy < 0) {
         dy = -dy;
     }
 

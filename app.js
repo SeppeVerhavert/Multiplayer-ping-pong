@@ -8,7 +8,7 @@ let y = 220;
 let dx = 3;
 let dy = 3;
 let ballDiameter = 10;
-let palletY= 220;
+let palletY = 220;
 let pallet1X = 50;
 let pallet2X = 940;
 let palletwidth = 10;
@@ -40,7 +40,7 @@ function drawField() {
     ctx.fillStyle = "red";
     ctx.fill();
     ctx.closePath();
-    
+
     ctx.beginPath();
     ctx.rect(500, 0, 500, 500);
     ctx.fillStyle = "blue";
@@ -90,19 +90,19 @@ function randomDirection() {
 //      PLAYER MOVEMENT        //
 
 function keyDownHandler(e) {
-    if(e.key == "Up" || e.key == "ArrowUp") {
+    if (e.key == "Up" || e.key == "ArrowUp") {
         upPressed = true;
     }
-    else if(e.key == "Down" || e.key == "ArrowDown") {
+    else if (e.key == "Down" || e.key == "ArrowDown") {
         downPressed = true;
-    }   
+    }
 }
 
 function keyUpHandler(e) {
-    if(e.key == "Up" || e.key == "ArrowUp") {
+    if (e.key == "Up" || e.key == "ArrowUp") {
         upPressed = false;
     }
-    else if(e.key == "Down" || e.key == "ArrowDown") {
+    else if (e.key == "Down" || e.key == "ArrowDown") {
         downPressed = false;
     }
 }
@@ -120,33 +120,33 @@ function draw() {
         if (y > palletY && y < palletY + palletHeigth) {
             dx = -dx;
         }
-    } else if(x + dx > pallet2X && x + dx < pallet2X + palletwidth) {
+    } else if (x + dx > pallet2X && x + dx < pallet2X + palletwidth) {
         if (y > palletY && y < palletY + palletHeigth) {
             dx = -dx;
         }
-    } 
-    
-    if (x + dx > canvas.width) {
+    }
+
+    if (x + dx > canvas.width-ballDiameter) {
+        gameOver();
         counterP1 += 1;
         scoreP1.innerHTML = counterP1;
-        document.location.reload();
     } else if (x + dx < 0) {
+        gameOver();
         counterP2 += 1;
         scoreP2.innerHTML = counterP2;
-        document.location.reload();
     }
-    
+
     if (y + dy > canvas.height || y + dy < 0) {
         dy = -dy;
-    } 
+    }
 
-    if(downPressed) {
+    if (downPressed) {
         palletY += 5;
         if (palletY + palletHeigth > canvas.height) {
             palletY = canvas.height - palletHeigth;
         }
     }
-    else if(upPressed) {
+    else if (upPressed) {
         palletY -= 5;
         if (palletY < 0) {
             palletY = 0;
@@ -163,20 +163,17 @@ function draw() {
 
 
 startGame();
-randomDirection();
+let drawInterval = setInterval(draw, 10);
+
 
 function startGame() {
-    i = 3;
-    setInterval(timer, 1000);
-    // setInterval(draw, 10);
+    drawField();
+    randomDirection();
 }
 
-function timer(){
-    if (i > 0){
-        timerDiv.innerHTML = i;
-        i--;
-    } else {
-        timerDiv.innerHTML = "";
-        clearInterval(timer);
-    }
+function gameOver() {
+    clearInterval(drawInterval);
+    clearInterval(window.drawInterval);
+    window.drawInterval = setInterval(draw, 10);
+    startGame();
 }

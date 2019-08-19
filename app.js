@@ -19,6 +19,8 @@ let scoreP1 = document.getElementById("scoreP1");
 let scoreP2 = document.getElementById("scoreP2");
 counterP1 = 0;
 counterP2 = 0;
+let timerDiv = document.getElementById("timer");
+let i = 3;
 
 
 //          EVENTLISTENERS           //
@@ -127,13 +129,11 @@ function draw() {
     if (x + dx > canvas.width) {
         counterP1 += 1;
         scoreP1.innerHTML = counterP1;
-        // document.location.reload();
-        clearInterval(interval);
+        document.location.reload();
     } else if (x + dx < 0) {
         counterP2 += 1;
         scoreP2.innerHTML = counterP2;
-        // document.location.reload();
-        clearInterval(interval);
+        document.location.reload();
     }
     
     if (y + dy > canvas.height || y + dy < 0) {
@@ -161,5 +161,22 @@ function draw() {
 //          CALL FUNCTIONS           //
 
 
+
+startGame();
 randomDirection();
-let interval = setInterval(draw, 10);
+
+function startGame() {
+    i = 3;
+    setInterval(timer, 1000);
+    // setInterval(draw, 10);
+}
+
+function timer(){
+    if (i > 0){
+        timerDiv.innerHTML = i;
+        i--;
+    } else {
+        timerDiv.innerHTML = "";
+        clearInterval(timer);
+    }
+}

@@ -1,11 +1,13 @@
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
-let x = 0;
-let y = 0;
-let dx = 5;
-let dy = 5;
+let x = 500;
+let y = 220;
+let dx = 3;
+let dy = 3;
 let ballDiameter = 10;
-let palletY= 250;
+let palletY= 220;
+let pallet1X = 50;
+let pallet2X = 940;
 let palletwidth = 10;
 let palletHeigth = 100;
 let upPressed = false;
@@ -38,7 +40,7 @@ function drawBall() {
 
 function drawPallet1() {
     ctx.beginPath();
-    ctx.rect(50, palletY, palletwidth, palletHeigth);
+    ctx.rect(pallet1X, palletY, palletwidth, palletHeigth);
     ctx.fillStyle = "white";
     ctx.fill();
     ctx.closePath();
@@ -46,7 +48,7 @@ function drawPallet1() {
 
 function drawPallet2() {
     ctx.beginPath();
-    ctx.rect(940, palletY, palletwidth, palletHeigth);
+    ctx.rect(pallet2X, palletY, palletwidth, palletHeigth);
     ctx.fillStyle = "white";
     ctx.fill();
     ctx.closePath();
@@ -77,22 +79,25 @@ function draw() {
     drawPallet1();
     drawPallet2();
 
-    if (x + dx === 50) {
+    if (x + dx > pallet1X - palletwidth && x + dx < pallet1X) {
         if (y > palletY && y < palletY + palletHeigth) {
             dx = -dx;
         }
-    }
-
-    if (x + dx === 940) {
+    } else if(x + dx > pallet2X && x + dx < pallet2X + palletwidth) {
         if (y > palletY && y < palletY + palletHeigth) {
             dx = -dx;
         }
+    } 
+    
+    if (x + dx > canvas.width || x + dx < 0) {
+        alert("GAME OVER");
+        document.location.reload();
+        clearInterval(interval);
     }
     
-
     if (y + dy > canvas.height || y + dy < 0) {
         dy = -dy;
-    }
+    } 
 
     if(downPressed) {
         palletY += 5;

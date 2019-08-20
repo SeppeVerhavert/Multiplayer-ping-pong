@@ -4,9 +4,9 @@
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 let x = 500;
-let y = 220;
+let y = canvas.height/2;
 let dx = 3;
-let dy = 1;
+let dy = 3;
 let ballDiameter = 10;
 let palletY = 220;
 let pallet1X = 60;
@@ -87,8 +87,22 @@ function randomDirection() {
 function randomVelocity() {
     let randVelX = Math.floor(Math.random() * (6 - 3) + 3);
     let randVelY = Math.floor(Math.random() * (6 - 3) + 3);
-    dx = randVelX;
-    dy = randVelY;
+    if (dx < 0 && dy < 0) {
+        dx = - randVelX;
+        dy = - randVelY;
+    } 
+    else if (dx < 0 && dy > 0) {
+        dx = - randVelX;
+        dy = randVelY;
+    }
+    else if (dx > 0 && dy < 0) {
+        dx = randVelX;
+        dy = - randVelY;
+    } 
+    else if (dx > 0 && dy > 0) {
+        dx = randVelX;
+        dy = randVelY;
+    }
 }
 
 //      PLAYER MOVEMENT        //
@@ -121,14 +135,14 @@ function draw() {
     drawPallet2();
 
     if (x + dx > pallet1X - palletwidth && x + dx < pallet1X) {
-        if (y > palletY && y < palletY + palletHeigth) {
+        if (y > palletY - 5 && y < palletY + palletHeigth) {
+            randomVelocity();
             dx = -dx;
-            // randomVelocity();
         }
     } else if (x + dx > pallet2X && x + dx < pallet2X + palletwidth) {
-        if (y > palletY && y < palletY + palletHeigth) {
+        if (y > palletY -5 && y < palletY + palletHeigth) {
+            randomVelocity();
             dx = -dx;
-            // randomVelocity();
         }
     }
 
@@ -149,13 +163,13 @@ function draw() {
     }
 
     if (downPressed) {
-        palletY += 3;
+        palletY += 5;
         if (palletY + palletHeigth > canvas.height) {
             palletY = canvas.height - palletHeigth;
         }
     }
     else if (upPressed) {
-        palletY -= 3;
+        palletY -= 5;
         if (palletY < 0) {
             palletY = 0;
         }

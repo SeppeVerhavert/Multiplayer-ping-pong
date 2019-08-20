@@ -3,10 +3,12 @@
 
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
+
 let x = 500;
 let y = 250;
 let dx = 3;
 let dy = 3;
+
 let ballDiameter = 10;
 let palletYP1 = 220;
 let palletYP2 = 220;
@@ -14,24 +16,37 @@ let palletXP1 = 60;
 let palletXP2 = 960;
 let palletwidth = 10;
 let palletHeigth = 100;
+
 let upPressedP1 = false;
 let downPressedP1 = false;
 let upPressedP2 = false;
 let downPressedP2 = false;
+
 let scoreP1 = document.getElementById("scoreP1");
 let scoreP2 = document.getElementById("scoreP2");
 let counterP1 = 0;
 let counterP2 = 0;
+
 let savedX = 0;
 let savedY = 0;
 
-
+// let easyButton = document.getElementById("easyButton");
+// let mediumButton = document.getElementById("mediumButton");
+// let hardButton = document.getElementById("hardButton");
+// let easyMode = true;
+// let mediumMode = false;
+// let hardMode = false;
+// let difficulty;
 
 //          EVENTLISTENERS           //
 
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+
+// easyButton.addEventListener('click', changeDifficulty);
+// mediumButton.addEventListener('click', changeDifficulty);
+// hardButton.addEventListener('click', changeDifficulty);
 
 
 //          FUNCTIONS           //
@@ -41,13 +56,13 @@ document.addEventListener("keyup", keyUpHandler, false);
 function drawField() {
     ctx.beginPath();
     ctx.rect(0, 0, 510, 500);
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "#ff0200";
     ctx.fill();
     ctx.closePath();
 
     ctx.beginPath();
     ctx.rect(510, 0, 510, 500);
-    ctx.fillStyle = "blue";
+    ctx.fillStyle = "#002fff";
     ctx.fill();
     ctx.closePath();
 }
@@ -109,38 +124,40 @@ function randomVelocity() {
     else if (dx > 0 && dy > 0) {
         dx = randVelX;
         dy = randVelY;
-    } else {
-
     }
 }
 
 //      PLAYER MOVEMENT        //
 
 function keyDownHandler(e) {
-    if (e.keyCode == 83 ) {
+    //      PLAYER 1      //
+    if (e.keyCode == 83) {
         upPressedP1 = true;
     }
-    else if (e.keyCode == 88 ) {
+    else if (e.keyCode == 88) {
         downPressedP1 = true;
     }
+    //      PLAYER 2      //
     if (e.key == "Up" || e.key == "ArrowUp") {
         upPressedP2 = true;
-    } 
+    }
     else if (e.key == "Down" || e.key == "ArrowDown") {
         downPressedP2 = true;
     }
 }
 
 function keyUpHandler(e) {
-    if (e.keyCode == 83 ) {
+    //      PLAYER 1      //
+    if (e.keyCode == 83) {
         upPressedP1 = false;
     }
-    else if (e.keyCode == 88 ) {
+    else if (e.keyCode == 88) {
         downPressedP1 = false;
     }
+    //      PLAYER 2      //
     if (e.key == "Up" || e.key == "ArrowUp") {
         upPressedP2 = false;
-    } 
+    }
     else if (e.key == "Down" || e.key == "ArrowDown") {
         downPressedP2 = false;
     }
@@ -154,19 +171,38 @@ function draw() {
     drawBall();
     drawPallet1();
     drawPallet2();
+    collisionDetection();
+    pointMade();
+    movePlayers();
+    x += dx;
+    y += dy;
+}
 
+//      COLLISION DETECTION       //
+
+function collisionDetection() {
     if (x + dx > palletXP1 - palletwidth && x + dx < palletXP1) {
         if (y > palletYP1 - 5 && y < palletYP1 + palletHeigth) {
             randomVelocity();
             dx = -dx;
+            console.log(difficulty);
         }
     } else if (x + dx > palletXP2 && x + dx < palletXP2 + palletwidth) {
         if (y > palletYP2 - 5 && y < palletYP2 + palletHeigth) {
             randomVelocity();
             dx = -dx;
+            console.log(difficulty);
         }
     }
 
+    if (y + dy > canvas.height || y + dy < 0) {
+        dy = -dy;
+    }
+}
+
+//      CHECK FOR POINTS       //
+
+function pointMade() {
     if (x + dx > canvas.width - ballDiameter) {
         counterP1 += 1;
         scoreP1.innerHTML = counterP1;
@@ -176,11 +212,11 @@ function draw() {
         scoreP2.innerHTML = counterP2;
         gameOver();
     }
+}
 
-    if (y + dy > canvas.height || y + dy < 0) {
-        dy = -dy;
-    }
+//      PLAYER MOVEMENT       //
 
+function movePlayers() {
     if (downPressedP1) {
         palletYP1 += 7;
         if (palletYP1 + palletHeigth > canvas.height) {
@@ -206,9 +242,6 @@ function draw() {
             palletYP2 = 0;
         }
     }
-
-    x += dx;
-    y += dy;
 }
 
 //      START       //
@@ -230,16 +263,35 @@ function gameOver() {
     dx = 0;
     dy = 0;
     x = canvas.width / 2 - 5;
-    y= 250;
+    y = 250;
     startGame();
 }
 
 function timer() {
     dx = -savedX;
     dy = savedY;
-    // randomDirection();
     randomVelocity();
 }
+
+//      START AGAIN       //
+
+// function changeDifficulty() {
+//     if (this.id = "easyButton") {
+//         easyMode = true;
+//         mediumMode = false;
+//         hardMode = false;
+//     }
+//     else if (this.id = "mediumButton") {
+//         easyMode = false;
+//         mediumMode = true;
+//         hardMode = false;
+//     }
+//     else if (this.id = "hardButton") {
+//         easyMode = false;
+//         mediumMode = false;
+//         hardMode = true;
+//     }
+// }
 
 
 //          CALL FUNCTIONS           //

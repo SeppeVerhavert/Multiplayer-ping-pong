@@ -1,0 +1,9 @@
+{
+  "name": "Multiplayer Ping Pong",
+  "version": "0.0.1",
+  "description": "The Atari classic Pong with multiplayer",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.2.0"
+  }
+}

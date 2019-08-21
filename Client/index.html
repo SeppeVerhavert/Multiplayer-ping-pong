@@ -1,4 +1,36 @@
-<!DOCTYPE html>
+<canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas> 
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    let ctx = document.getElementById("ctx").getContext("2d");
+    ctx.font = '30px Arial';
+    
+    var socket = io();
+
+    socket.on('newPositions', function(data){
+        ctx.clearRect(0,0,500,500);
+        for(var i = 0; i < data.length; i++) {
+            ctx.fillText('P', data[i].x, data[i].y);
+        }
+    });
+
+    // var random = Math.random();
+
+    // var happy = function () {
+    //     socket.emit('happy', {
+    //         reason: "it's my birthday" + random
+    //     });
+    // }
+
+    // socket.on('serverMsg', function (data) {
+    //     console.log(data.msg);
+    // });
+
+</script>
+
+<!-- <button onclick="happy()">Happy</button> -->
+
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -12,11 +44,11 @@
 <body>
 
     <div class="container">
-        <!-- <div class="difficultyButtons">
+        <div class="difficultyButtons">
             <button class="button" id="easyButton">EASY</button>
             <button class="button" id="mediumButton">MEDIUM</button>
             <button class="button" id="hardButton">HARD</button>
-        </div> -->
+        </div>
         <div class="controlbox" id="controlsP1">
             <p>P1 Controls</p>
             <br>
@@ -37,8 +69,15 @@
     </div>
 
     <script src="app.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+  
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        var socket = io.connect('http://localhost');
+        socket.on('news', function (data) {
+            console.log(data);
+            socket.emit('my other event', { my: 'data' });
+        });
+    </script>
 </body>
 
-</html>
+</html> -->

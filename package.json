@@ -1,5 +1,5 @@
 {
-  "name": "Multiplayer Ping Pong",
+  "name": "multiplayer_ping_pong",
   "version": "0.0.1",
   "description": "The Atari classic Pong with multiplayer",
   "dependencies": {

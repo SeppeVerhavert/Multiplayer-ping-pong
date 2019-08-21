@@ -107,7 +107,7 @@ function randomDirection() {
 //      RANDOM VELOCITY         //
 
 function randomVelocity() {
-    let randVelX = Math.floor(Math.random() * (5 - 3) + 3);
+    let randVelX = Math.floor(Math.random() * (7 - 4) + 4);
     let randVelY = Math.floor(Math.random() * (5 - 3) + 3);
     if (dx < 0 && dy < 0) {
         dx = - randVelX;

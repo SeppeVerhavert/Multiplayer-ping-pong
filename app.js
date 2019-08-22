@@ -31,7 +31,10 @@ io.sockets.on('connection', function (socket) {
   var player = Player(socket.id);
   player_list[socket.id] = player;
 
+  console.log(player_list);
+
   socket.on('disconnect', function () {
+    console.log(socket.id + " disconnected");
     delete socket_list[socket.id];
     delete player_list[socket.id];
   });

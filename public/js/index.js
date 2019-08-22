@@ -4,8 +4,8 @@
 let canvas = document.getElementById("ctx");
 let ctx = canvas.getContext("2d");
 
-let x = 500;
-let y = 250;
+var x = 500;
+var y = 250;
 let dx = 3;
 let dy = 3;
 
@@ -169,11 +169,11 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawField();
     drawBall();
-//     drawPallet1();
-//     drawPallet2();
+    //     drawPallet1();
+    //     drawPallet2();
     collisionDetection();
-//     pointMade();
-//     movePlayers();
+    //     pointMade();
+    //     movePlayers();
     x += dx;
     y += dy;
 }
@@ -250,7 +250,7 @@ function collisionDetection() {
 
 function startGame() {
     drawField();
-//     randomDirection();
+    //     randomDirection();
 }
 
 // //      START AGAIN       //
@@ -298,15 +298,23 @@ function startGame() {
 
 // //          CALL FUNCTIONS           //
 
-var socket = io('http:/localhost:3000/');
 
-socket.on('connect', function () {
-    startGame();
-    window.drawInterval = setInterval(draw, 10);
+
+// socket.on('updateClient', function () {
+//     x = serverX;
+//     y = serverY;
+startGame();
+window.drawInterval = setInterval(draw, 10);
+// });
+
+// setInterval(() => {
+//     socket.emit('updateServer', { 
+//         serverX: x,
+//         serverY: y, });
+// }, 1000 / 25);
+
+var socket = io.connect('http://localhost:3000');
+socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
 });
-
-setInterval(() => {
-    socket.emit('updateServer', function() { 
-        serverX: x;
-        serverY: y });
-}, 1000 / 60);

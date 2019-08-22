@@ -27,9 +27,9 @@ var Player = function (id) {
 
 var io = require('socket.io')(server);
 io.sockets.on('connection', function (socket) {
-  socket.id = Math.random();
-  socket_list[socket.id] = socket;
+  console.log(socket_list);
 
+  console.log(socket.id + " connected");
   var player = Player(socket.id);
   player_list[socket.id] = player;
 
@@ -39,3 +39,10 @@ io.sockets.on('connection', function (socket) {
     delete player_list[socket.id];
   });
 });
+
+// setInterval(() => {
+//   io.sockets.emit("updateClient", updateClient({
+//       circleX: playerState.circleX,
+//       circleY: playerState.circleY
+//   })
+// , 1000 / 25)});

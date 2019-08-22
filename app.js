@@ -14,36 +14,37 @@ console.log("server started.");
 var socket_list = {};
 var player_list = {};
 
-var Player = function (id) {
-  var self = {
-    x: 250,
-    y: 250,
-    id: id,
-    number: "" + Math.floor(10 * Math.random()),
-    pressingRight: false,
-    pressingLeft: false,
-    pressingUp: false,
-    pressingDown: false,
-    maxSpd: 10,
-  }
-  self.updatePosition = function () {
-    if (self.pressingRight)
-      self.x += self.maxSpd;
+// var Player = function (id) {
+//   var self = {
+//     x: 250,
+//     y: 250,
+//     id: id,
+//     number: "" + Math.floor(10 * Math.random()),
+//     pressingRight: false,
+//     pressingLeft: false,
+//     pressingUp: false,
+//     pressingDown: false,
+//     maxSpd: 10,
+//   }
+//   self.updatePosition = function () {
+//     if (self.pressingRight)
+//       self.x += self.maxSpd;
 
-    if (self.pressingLeft)
-      self.x -= self.maxSpd;
+//     if (self.pressingLeft)
+//       self.x -= self.maxSpd;
 
-    if (self.pressingUp)
-      self.x -= self.maxSpd;
+//     if (self.pressingUp)
+//       self.x -= self.maxSpd;
 
-    if (self.pressingDown)
-      self.x += self.maxSpd;
-  }
-  return self;
-}
+//     if (self.pressingDown)
+//       self.x += self.maxSpd;
+//   }
+//   return self;
+// }
 
 var io = require('socket.io')(server);
 io.sockets.on('connection', function (socket) {
+  console.log('yay');
   socket.id = Math.random();
   socket_list[socket.id] = socket;
 
@@ -55,30 +56,30 @@ io.sockets.on('connection', function (socket) {
     delete player_list[socket.id];
   });
 
-  // console.log('happy because ' + data.reason);
+//   // console.log('happy because ' + data.reason);
 
-  // socket.on('happy', function(data){
-  //   console.log('happy because ' + data.reason);
-  // });
+//   // socket.on('happy', function(data){
+//   //   console.log('happy because ' + data.reason);
+//   // });
 
-  // socket.emit('serverMsg', {
-  //   msg:'hello'
-  // });
+//   // socket.emit('serverMsg', {
+//   //   msg:'hello'
+//   // });
 });
 
-setInterval(function () {
-  var pack = [];
-  for (var i in player_list) {
-    var player = player_list[i];
-    player.updatePosition();
-    pack.push({
-      x: player.x,
-      y: player.y,
-      number: player.number
-    });
-  }
-  for (var i in socket_list) {
-    var socket = socket_list[i];
-    socket.emit('newPositions', pack);
-  }
-}, 1000 / 25);
+// setInterval(function () {
+//   var pack = [];
+//   for (var i in player_list) {
+//     var player = player_list[i];
+//     player.updatePosition();
+//     pack.push({
+//       x: player.x,
+//       y: player.y,
+//       number: player.number
+//     });
+//   }
+//   for (var i in socket_list) {
+//     var socket = socket_list[i];
+//     socket.emit('newPositions', pack);
+//   }
+// }, 1000 / 25);

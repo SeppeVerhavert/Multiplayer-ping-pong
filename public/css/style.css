@@ -58,8 +58,9 @@
     margin-top: -280px;
 }
 
-#myCanvas {
+#ctx {
     align-content: center;
+    border: 1px solid black;
 }
 
 .score {

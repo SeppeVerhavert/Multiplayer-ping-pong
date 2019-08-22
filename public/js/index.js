@@ -1,67 +1,9 @@
-// socket.on('newPositions', function (data) {
-//     ctx.clearRect(0, 0, 500, 500);
-//     for (var i = 0; i < data.length; i++) {
-//         ctx.fillText(data[i].number, data[i].x, data[i].y);
-//     }
-// });
-
-// document.onkeydown = function (event) {
-//     if (event.keyCode === 39) {  //right
-//         socket.emit('keyPress', {
-//             inputId: 'right', state: true
-//         });
-//     } else if (event.keyCode === 37) {  //left
-//         socket.emit('keyPress', {
-//             inputId: 'left', state: true
-//         });
-//     } else if (event.keyCode === 38) {  //up
-//         socket.emit('keyPress', {
-//             inputId: 'up', state: true
-//         });
-//     } else if (event.keyCode === 40) {  //down
-//         socket.emit('keyPress', {
-//             inputId: 'down', state: true
-//         });
-//     }
-// }
-
-// document.onkeyup = function (event) {
-//     if (event.keyCode === 39) {  //right
-//         socket.emit('keyPress', {
-//             inputId: 'right', state: false
-//         });
-//     } else if (event.keyCode === 37) {  //left
-//         socket.emit('keyPress', {
-//             inputId: 'left', state: false
-//         });
-//     } else if (event.keyCode === 38) {  //up
-//         socket.emit('keyPress', {
-//             inputId: 'up', state: false
-//         });
-//     } else if (event.keyCode === 40) {  //down
-//         socket.emit('keyPress', {
-//             inputId: 'down', state: false
-//         });
-//     }
-// }
-
-// var random = Math.random();
-
-// var happy = function () {
-//     socket.emit('happy', {
-//         reason: "it's my birthday" + random
-//     });
-// }
-
-// socket.on('serverMsg', function (data) {
-//     console.log(data.msg);
-// });
-
+var socket = io();
 
 socket.on('test', function (data) {
     ctx.clearRect(0, 0, 500, 500);
     for (var i = 0; i < data.length; i++) {
-        ctx.fillText(data[i].number, data[i].x, data[i].y);
+        ctx.fillText(p, 500, 500);
     }
 });
 
@@ -71,8 +13,6 @@ socket.on('test', function (data) {
 
 let canvas = document.getElementById("ctx");
 let ctx = canvas.getContext("2d");
-
-var socket = io();
 
 // let x = 500;
 // let y = 250;

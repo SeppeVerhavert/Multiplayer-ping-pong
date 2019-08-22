@@ -18,35 +18,35 @@ app.use(express.static('public'));
 server.listen(3000);
 console.log("server started.");
 
-// var socket_list = {};
-// var player_list = {};
+var socket_list = {};
+var player_list = {};
 
-// var Player = function (id) {
-//   var self = {}
-//   return self;
-// }
+var Player = function (id) {
+  var self = {}
+  return self;
+}
 
 io.on('connection', function (socket) {
-  console.log("yay");
+  console.log("player " + socket.id + " connected");
   socket.emit('news', { hello: 'world' });
   socket.on('my other event', function (data) {
     console.log(data);
   });
+
+  var player = Player(socket.id);
+  player_list[socket.id] = player;
+
+  // socket.on('updateServer', function () {
+  //   x = serverX;
+  //   y = serverY;
+  // });
+
+  socket.on('disconnect', function () {
+    console.log(socket.id + " disconnected");
+    delete socket_list[socket.id];
+    delete player_list[socket.id];
+  });
 });
-//   var player = Player(socket.id);
-//   player_list[socket.id] = player;
-
-//   // socket.on('updateServer', function () {
-//   //   x = serverX;
-//   //   y = serverY;
-//   // });
-
-//   socket.on('disconnect', function (socket) {
-//     console.log(socket.id + " disconnected");
-//     delete socket_list[socket.id];
-//     delete player_list[socket.id];
-//   });
-// });
 
 // setInterval(() => {
 //   io.sockets.emit("updateClient", {

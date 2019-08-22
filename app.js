@@ -2,16 +2,18 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 
+//  GET HTML
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/public/index.html')
 });
 
-//LINK TO JS
+//  LINK TO JS
 app.use('/public', express.static(__dirname + '/public'));
 
-//LINK TO CSS
+//  LINK TO CSS
 app.use(express.static('public'));
 
+//  SET PORT
 server.listen(3000);
 console.log("server started.");
 
@@ -30,8 +32,6 @@ io.sockets.on('connection', function (socket) {
 
   var player = Player(socket.id);
   player_list[socket.id] = player;
-
-  console.log(player_list);
 
   socket.on('disconnect', function () {
     console.log(socket.id + " disconnected");

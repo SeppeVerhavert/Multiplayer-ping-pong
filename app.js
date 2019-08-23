@@ -50,16 +50,20 @@ io.on('connection', function (socket) {
     delete player_list[socket.id];
   });
 
-
   socket.on('clientUpdate', function (data) {
     serverX = data.clientX + serverDx;
     serverY = data.clientY + serverDy;
     serverDx = data.clientDx;
     serverDy = data.clientDy;
-    ballpack = { 1: serverX, 2: serverY, 3: serverDx, 4: serverDy};
+    ballpack = { 
+      serverX: serverX, 
+      serverY: serverY, 
+      serverDx: serverDx, 
+      serverDy: serverDy};
   });
 
   setInterval(() => {
+    console.log(ballpack);
     socket.emit('serverUpdate', ballpack);
   }, 1000 / 25);
 });

@@ -288,6 +288,11 @@ function timer() {
 //     }
 // }
 
+newArray = [];
+newArray[0] = "yay";
+
+console.log(newArray);
+console.log(newArray.length);
 
 //          CALL FUNCTIONS           //
 

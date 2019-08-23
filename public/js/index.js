@@ -197,10 +197,10 @@ function collisionDetection() {
 //      CHECK FOR POINTS       //
 
 function pointMade() {
-    if (clientX + clientDx > canvas.width - ballDiameter) {
+    if (clientX > canvas.width) {
         clientCounterP1 += 1;
         gameOver();
-    } else if (clientX + clientDx < 0 + ballDiameter) {
+    } else if (clientX < 0) {
         clientCounterP2 += 1;
         gameOver();
     }
@@ -240,29 +240,31 @@ function movePlayers() {
 
 function startGame() {
     drawField();
-    //     randomDirection();
+    randomDirection();
 }
 
 //      START AGAIN       //
 
 function gameOver() {
+    console.log("stop");
+    console.log(clientDx, clientDy);
     savedX = clientDx;
     savedY = clientDy;
     clientX = canvas.width / 2 - 5;
     clientY = 250;
     clientDx = 0;
     clientDy = 0;
-    setTimeout(timer, 1000);
+    setTimeout(timer, 3000);
     clearInterval(drawInterval);
     clearInterval(window.drawInterval);
     window.drawInterval = setInterval(draw, 10);
     updatescore();
     startGame();
-    console.log("start");
-    console.log(savedX, savedY);
+
 }
 
 function timer() {
+    console.log("start");
     clientDx = -savedX;
     clientDy = savedY;
     randomVelocity();
@@ -298,7 +300,7 @@ function updatescore() {
 
 
 startGame();
-window.drawInterval = setInterval(draw, 1000/60);
+window.drawInterval = setInterval(draw, 1000 / 60);
 
 var socket = io.connect('http://localhost:3000');
 
@@ -313,13 +315,16 @@ socket.on('serverUpdate', function (update) {
     clientCounterP2 = update.serverScoreP2;
 });
 
-setInterval(() => { socket.emit('clientUpdate', 
-{   clientX, 
-    clientY, 
-    clientDx, 
-    clientDy, 
-    clientPalletYP1, 
-    clientPalletYP2, 
-    clientCounterP1, 
-    clientCounterP2 
-}), 1000 / 60 });
+setInterval(() => {
+    socket.emit('clientUpdate',
+        {
+            clientX,
+            clientY,
+            clientDx,
+            clientDy,
+            clientPalletYP1,
+            clientPalletYP2,
+            clientCounterP1,
+            clientCounterP2
+        }), 1000 / 60
+});

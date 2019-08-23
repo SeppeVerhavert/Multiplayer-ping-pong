@@ -34,7 +34,7 @@ let serverPalletYP1 = 220;
 let serverPalletYP2 = 220;
 
 let serverScoreP1 = 0;
-let serverScoreP2 = 0; 
+let serverScoreP2 = 0;
 
 updatePack = {
   serverX: serverX,
@@ -59,23 +59,27 @@ io.on('connection', function (socket) {
     serverPalletYP1 = data.clientPalletYP1;
     serverPalletYP2 = data.clientPalletYP2;
 
-    serverScoreP1 = data.clientCounterP1, 
-    serverScoreP2 = data.clientCounterP2, 
+    serverScoreP1 = data.clientCounterP1,
+      serverScoreP2 = data.clientCounterP2,
 
-    updatePack = {
-      serverX: serverX,
-      serverY: serverY,
-      serverDx: serverDx,
-      serverDy: serverDy,
-      serverPalletYP1: serverPalletYP1,
-      serverPalletYP2: serverPalletYP2,
-      serverScoreP1: serverScoreP1,
-      serverScoreP2: serverScoreP2
-    };
+      updatePack = {
+        serverX: serverX,
+        serverY: serverY,
+        serverDx: serverDx,
+        serverDy: serverDy,
+        serverPalletYP1: serverPalletYP1,
+        serverPalletYP2: serverPalletYP2,
+        serverScoreP1: serverScoreP1,
+        serverScoreP2: serverScoreP2
+      };
   });
 
   if (Object.keys(player_list).length < 2) {
-    console.log("waiting for opponent")
+    console.log("waiting for opponent");
+    multiPlayer = false;
+    serverScoreP1 = 0;
+    serverScoreP2 = 0;
+    console.log(serverScoreP1);
   } else if (Object.keys(player_list).length >= 2) {
     console.log("2 players");
     multiPlayer = true;
@@ -87,11 +91,9 @@ io.on('connection', function (socket) {
     delete player_list[socket.id];
   });
 
-
   setInterval(() => {
-    if(multiPlayer === true)
-    {
+    if (multiPlayer === true) {
       socket.emit('serverUpdate', updatePack);
     }
-    }, 1000 / 60);
+  }, 1000 / 60);
 });

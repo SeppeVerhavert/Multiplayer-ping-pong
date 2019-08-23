@@ -22,10 +22,8 @@ let downPressedP1 = false;
 let upPressedP2 = false;
 let downPressedP2 = false;
 
-let scoreP1 = document.getElementById("scoreP1");
-let scoreP2 = document.getElementById("scoreP2");
-let counterP1 = 0;
-let counterP2 = 0;
+let clientCounterP1 = 0;
+let clientCounterP2 = 0;
 
 let savedX = 0;
 let savedY = 0;
@@ -174,6 +172,7 @@ function draw() {
     collisionDetection();
     pointMade();
     movePlayers();
+    updatescore();
 }
 
 //      COLLISION DETECTION       //
@@ -190,7 +189,7 @@ function collisionDetection() {
             clientDx = -clientDx;
         }
     }
-    if (clientY + clientDy > canvas.height || clientY + clientDy < 0) {
+    if (clientY - clientDy > canvas.height || clientY + clientDy < 0) {
         clientDy = -clientDy;
     }
 }
@@ -199,12 +198,10 @@ function collisionDetection() {
 
 function pointMade() {
     if (clientX + clientDx > canvas.width - ballDiameter) {
-        counterP1 += 1;
-        scoreP1.innerHTML = counterP1;
+        clientCounterP1 += 1;
         gameOver();
     } else if (clientX + clientDx < 0 + ballDiameter) {
-        counterP2 += 1;
-        scoreP2.innerHTML = counterP2;
+        clientCounterP2 += 1;
         gameOver();
     }
 }
@@ -251,25 +248,33 @@ function startGame() {
 function gameOver() {
     savedX = clientDx;
     savedY = clientDy;
-    setTimeout(timer, 500);
+    clientX = canvas.width / 2 - 5;
+    clientY = 250;
+    clientDx = 0;
+    clientDy = 0;
+    setTimeout(timer, 1000);
     clearInterval(drawInterval);
     clearInterval(window.drawInterval);
     window.drawInterval = setInterval(draw, 10);
-    clientDx = 0;
-    clientDy = 0;
-    clientX = canvas.width / 2 - 5;
-    clientY = 250;
+    updatescore();
     startGame();
+    console.log("start");
+    console.log(savedX, savedY);
 }
 
 function timer() {
     clientDx = -savedX;
     clientDy = savedY;
     randomVelocity();
+    console.log(clientDx, clientDy);
 }
 
-//      START AGAIN       //
+//      UPDATE SCORE       //
 
+function updatescore() {
+    document.getElementById("scoreP1").innerHTML = clientCounterP1;
+    document.getElementById("scoreP2").innerHTML = clientCounterP2;
+}
 // function changeDifficulty() {
 //     if (this.id = "easyButton") {
 //         easyMode = true;
@@ -288,11 +293,6 @@ function timer() {
 //     }
 // }
 
-newArray = [];
-newArray[0] = "yay";
-
-console.log(newArray);
-console.log(newArray.length);
 
 //          CALL FUNCTIONS           //
 
@@ -309,6 +309,17 @@ socket.on('serverUpdate', function (update) {
     clientDy = update.serverDy;
     clientPalletYP1 = update.serverPalletYP1;
     clientPalletYP2 = update.serverPalletYP2;
+    clientCounterP1 = update.serverScoreP1;
+    clientCounterP2 = update.serverScoreP2;
 });
 
-setInterval(() => { socket.emit('clientUpdate', { clientX, clientY, clientDx, clientDy, clientPalletYP1, clientPalletYP2 }), 1000 / 60 });
+setInterval(() => { socket.emit('clientUpdate', 
+{   clientX, 
+    clientY, 
+    clientDx, 
+    clientDy, 
+    clientPalletYP1, 
+    clientPalletYP2, 
+    clientCounterP1, 
+    clientCounterP2 
+}), 1000 / 60 });

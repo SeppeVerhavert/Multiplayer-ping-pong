@@ -94,10 +94,10 @@ function drawPallet2() {
 function randomDirection() {
     let random1 = Math.floor(Math.random() * 2);
     let random2 = Math.floor(Math.random() * 2);
-    if (random1 > 0) {
+    if (random1 >= 0) {
         clientDx = -clientDx;
     }
-    if (random2 > 0) {
+    if (random2 >= 0) {
         clientDy = -clientDy;
     }
 }
@@ -189,7 +189,7 @@ function collisionDetection() {
             clientDx = -clientDx;
         }
     }
-    if (clientY - clientDy > canvas.height || clientY + clientDy < 0) {
+    if (clientY + clientDy > canvas.height || clientY + clientDy < 0) {
         clientDy = -clientDy;
     }
 }

@@ -293,7 +293,7 @@ function timer() {
 
 
 startGame();
-window.drawInterval = setInterval(draw, 1000/25);
+window.drawInterval = setInterval(draw, 1000/60);
 
 var socket = io.connect('http://localhost:3000');
 
@@ -306,4 +306,4 @@ socket.on('serverUpdate', function (update) {
     clientPalletYP2 = update.serverPalletYP2;
 });
 
-setInterval(() => { socket.emit('clientUpdate', { clientX, clientY, clientDx, clientDy, clientPalletYP1, clientPalletYP2 }), 1000 / 25 });
+setInterval(() => { socket.emit('clientUpdate', { clientX, clientY, clientDx, clientDy, clientPalletYP1, clientPalletYP2 }), 1000 / 60 });

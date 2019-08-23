@@ -75,9 +75,13 @@ io.on('connection', function (socket) {
     };
   });
 
-  setInterval(() => {
-    socket.emit('serverUpdate', updatePack);
-  }, 1000 / 25);
+  if(player_list.lentgh = 2){
+    setInterval(() => {
+      socket.emit('serverUpdate', updatePack);
+    }, 1000 / 60);
+  } else {
+    console.log("waiting for other player");
+  }
 });
 
 

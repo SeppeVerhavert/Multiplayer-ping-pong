@@ -10,8 +10,8 @@ let clientDx = 3;
 let clientDy = 3;
 
 let ballDiameter = 10;
-let palletYP1 = 220;
-let palletYP2 = 220;
+let clientPalletYP1 = 220;
+let clientPalletYP2 = 220;
 let palletXP1 = 60;
 let palletXP2 = 960;
 let palletwidth = 12;
@@ -77,7 +77,7 @@ function drawBall() {
 
 function drawPallet1() {
     ctx.beginPath();
-    ctx.rect(palletXP1, palletYP1, palletwidth, palletHeigth);
+    ctx.rect(palletXP1, clientPalletYP1, palletwidth, palletHeigth);
     ctx.fillStyle = "white";
     ctx.fill();
     ctx.closePath();
@@ -85,7 +85,7 @@ function drawPallet1() {
 
 function drawPallet2() {
     ctx.beginPath();
-    ctx.rect(palletXP2, palletYP2, palletwidth, palletHeigth);
+    ctx.rect(palletXP2, clientPalletYP2, palletwidth, palletHeigth);
     ctx.fillStyle = "white";
     ctx.fill();
     ctx.closePath();
@@ -180,12 +180,12 @@ function draw() {
 
 function collisionDetection() {
     if (clientX + clientDx > palletXP1 - palletwidth && clientX + clientDx < palletXP1) {
-        if (clientY >= palletYP1 - 5 && clientY <= palletYP1 + palletHeigth) {
+        if (clientY >= clientPalletYP1 - 5 && clientY <= clientPalletYP1 + palletHeigth) {
             randomVelocity();
             clientDx = -clientDx;
         }
     } else if (clientX + clientDx > palletXP2 && clientX + clientDx < palletXP2 + palletwidth) {
-        if (clientY >= palletYP2 - 5 && clientY <= palletYP2 + palletHeigth) {
+        if (clientY >= clientPalletYP2 - 5 && clientY <= clientPalletYP2 + palletHeigth) {
             randomVelocity();
             clientDx = -clientDx;
         }
@@ -213,28 +213,28 @@ function pointMade() {
 
 function movePlayers() {
     if (downPressedP1) {
-        palletYP1 += 7;
-        if (palletYP1 + palletHeigth > canvas.height) {
-            palletYP1 = canvas.height - palletHeigth;
+        clientPalletYP1 += 7;
+        if (clientPalletYP1 + palletHeigth > canvas.height) {
+            clientPalletYP1 = canvas.height - palletHeigth;
         }
     }
     else if (upPressedP1) {
-        palletYP1 -= 7;
-        if (palletYP1 < 0) {
-            palletYP1 = 0;
+        clientPalletYP1 -= 7;
+        if (clientPalletYP1 < 0) {
+            clientPalletYP1 = 0;
         }
     }
 
     if (downPressedP2) {
-        palletYP2 += 7;
-        if (palletYP2 + palletHeigth > canvas.height) {
-            palletYP2 = canvas.height - palletHeigth;
+        clientPalletYP2 += 7;
+        if (clientPalletYP2 + palletHeigth > canvas.height) {
+            clientPalletYP2 = canvas.height - palletHeigth;
         }
     }
     else if (upPressedP2) {
-        palletYP2 -= 7;
-        if (palletYP2 < 0) {
-            palletYP2 = 0;
+        clientPalletYP2 -= 7;
+        if (clientPalletYP2 < 0) {
+            clientPalletYP2 = 0;
         }
     }
 }
@@ -297,11 +297,13 @@ window.drawInterval = setInterval(draw, 1000/25);
 
 var socket = io.connect('http://localhost:3000');
 
-socket.on('serverUpdate', function (ballpack) {
-    clientX = ballpack.serverX;
-    clientY = ballpack.serverY;
-    clientDx = ballpack.serverDx;
-    clientDy = ballpack.serverDy;
+socket.on('serverUpdate', function (update) {
+    clientX = update.serverX;
+    clientY = update.serverY;
+    clientDx = update.serverDx;
+    clientDy = update.serverDy;
+    clientPalletYP1 = update.serverPalletYP1;
+    clientPalletYP2 = update.serverPalletYP2;
 });
 
-setInterval(() => { socket.emit('clientUpdate', { clientX, clientY, clientDx, clientDy }), 1000 / 25 });
+setInterval(() => { socket.emit('clientUpdate', { clientX, clientY, clientDx, clientDy, clientPalletYP1, clientPalletYP2 }), 1000 / 25 });

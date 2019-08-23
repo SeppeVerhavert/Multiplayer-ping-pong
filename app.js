@@ -18,30 +18,36 @@ app.use(express.static('public'));
 server.listen(3000);
 console.log("server started.");
 
-var socket_list = {};
-var player_list = {};
+let socket_list = {};
+let player_list = {};
 
-var ballpack = {};
-var serverX = 500;
-var serverY = 250;
-var serverDx = 3;
-var serverDy = 3;
-ballpack = { 
+let updatePack = {};
+let serverX = 500;
+let serverY = 250;
+let serverDx = 3;
+let serverDy = 3;
+
+let serverPalletYP1 = 220;
+let serverPalletYP2 = 220;
+
+updatePack = { 
   serverX: serverX, 
   serverY: serverY, 
   serverDx: serverDx, 
-  serverDy: serverDy 
+  serverDy: serverDy,
+  serverPalletYP1: serverPalletYP1,
+  serverPalletYP2: serverPalletYP2
 };
 
-var Player = function (id) {
-  var self = {}
+let Player = function (id) {
+  let self = {}
   return self;
 }
 
 io.on('connection', function (socket) {
   console.log("player " + socket.id + " connected");
 
-  var player = Player(socket.id);
+  let player = Player(socket.id);
   player_list[socket.id] = player;
 
   socket.on('disconnect', function () {
@@ -55,16 +61,22 @@ io.on('connection', function (socket) {
     serverY = data.clientY + serverDy;
     serverDx = data.clientDx;
     serverDy = data.clientDy;
-    ballpack = { 
+    
+    serverPalletYP1 = data.clientPalletYP1;
+    serverPalletYP2 = data.clientPalletYP2;
+    
+    updatePack = { 
       serverX: serverX, 
       serverY: serverY, 
       serverDx: serverDx, 
-      serverDy: serverDy};
+      serverDy: serverDy,
+      serverPalletYP1: serverPalletYP1,
+      serverPalletYP2: serverPalletYP2
+    };
   });
 
   setInterval(() => {
-    console.log(ballpack);
-    socket.emit('serverUpdate', ballpack);
+    socket.emit('serverUpdate', updatePack);
   }, 1000 / 25);
 });
 

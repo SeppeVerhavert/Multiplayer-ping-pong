@@ -4,14 +4,14 @@
 let canvas = document.getElementById("ctx");
 let ctx = canvas.getContext("2d");
 
-var clientX = 500;
-var clientY = 250;
-let clientDx = 3;
-let clientDy = 3;
+var clientX;
+var clientY;
+let clientDx;
+let clientDy;
 
 let ballDiameter = 10;
-let clientPalletYP1 = 220;
-let clientPalletYP2 = 220;
+let clientPalletYP1;
+let clientPalletYP2;
 let palletXP1 = 60;
 let palletXP2 = 960;
 let palletwidth = 12;
@@ -22,8 +22,8 @@ let downPressedP1 = false;
 let upPressedP2 = false;
 let downPressedP2 = false;
 
-let clientCounterP1 = 0;
-let clientCounterP2 = 0;
+let clientCounterP1;
+let clientCounterP2;
 
 let savedX = 0;
 let savedY = 0;
@@ -105,8 +105,8 @@ function randomDirection() {
 //      RANDOM VELOCITY         //
 
 function randomVelocity() {
-    let randVelX = Math.floor(Math.random() * (7 - 4) + 4);
-    let randVelY = Math.floor(Math.random() * (5 - 3) + 3);
+    let randVelX = Math.floor(Math.random() * (6 - 3) + 3);
+    let randVelY = Math.floor(Math.random() * (6 - 3) + 3);
     if (clientDx < 0 && clientDy < 0) {
         clientDx = - randVelX;
         clientDy = - randVelY;
@@ -173,6 +173,16 @@ function draw() {
     pointMade();
     movePlayers();
     updatescore();
+    clientX += clientDx;
+    clientY += clientDy;
+    // console.log(
+    //     "clientX = " + clientX,
+    //     "clientY = " + clientY,
+    //     "clientDx = " + clientDx,
+    //     "clientDy = " + clientDy,
+    //     "clientPalletYP1 = " + clientPalletYP1,
+    //     "clientPalletYP2 = " + clientPalletYP2
+    //     );
 }
 
 //      COLLISION DETECTION       //
@@ -246,8 +256,6 @@ function startGame() {
 //      START AGAIN       //
 
 function gameOver() {
-    console.log("stop");
-    console.log(clientDx, clientDy);
     savedX = clientDx;
     savedY = clientDy;
     clientX = canvas.width / 2 - 5;
@@ -264,11 +272,9 @@ function gameOver() {
 }
 
 function timer() {
-    console.log("start");
     clientDx = -savedX;
     clientDy = savedY;
     randomVelocity();
-    console.log(clientDx, clientDy);
 }
 
 //      UPDATE SCORE       //
@@ -300,7 +306,7 @@ function updatescore() {
 
 
 startGame();
-window.drawInterval = setInterval(draw, 1000 / 60);
+window.drawInterval = setInterval(draw, 10);
 
 var socket = io.connect('http://localhost:3000');
 
@@ -313,18 +319,28 @@ socket.on('serverUpdate', function (update) {
     clientPalletYP2 = update.serverPalletYP2;
     clientCounterP1 = update.serverScoreP1;
     clientCounterP2 = update.serverScoreP2;
+
+    socket.emit('clientUpdate', {
+        clientX,
+        clientY,
+        clientDx,
+        clientDy,
+        clientPalletYP1,
+        clientPalletYP2,
+        clientCounterP1,
+        clientCounterP2,
+    })
 });
 
-setInterval(() => {
-    socket.emit('clientUpdate',
-        {
-            clientX,
-            clientY,
-            clientDx,
-            clientDy,
-            clientPalletYP1,
-            clientPalletYP2,
-            clientCounterP1,
-            clientCounterP2
-        }), 1000 / 60
-});
+// socket.on('serverUpdate', function (update) {
+//     setTimeout(console.log(
+//     update.serverX,
+//     update.serverY,
+//     update.serverDx,
+//     update.serverDy,
+//     update.serverPalletYP1,
+//     update.serverPalletYP2,
+//     update.serverScoreP1,
+//     update.serverScoreP2,
+//     ), 1000)
+// });

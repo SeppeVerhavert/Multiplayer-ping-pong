@@ -9,13 +9,11 @@ var clientY;
 let clientDx;
 let clientDy;
 
-let ballDiameter = 10;
-// let clientPalletYP1;
-// let clientPalletYP2;
-// let palletXP1 = 60;
-// let palletXP2 = 960;
-// let palletwidth = 12;
-// let palletHeigth = 100;
+let clientPalletYP1;
+let clientPalletYP2;
+let palletXP1;
+let palletXP2;
+
 
 // let upPressedP1 = false;
 // let downPressedP1 = false;
@@ -73,21 +71,21 @@ function drawBall() {
     ctx.closePath();
 }
 
-// function drawPallet1() {
-//     ctx.beginPath();
-//     ctx.rect(palletXP1, clientPalletYP1, palletwidth, palletHeigth);
-//     ctx.fillStyle = "white";
-//     ctx.fill();
-//     ctx.closePath();
-// }
+function drawPallet1() {
+    ctx.beginPath();
+    ctx.rect(palletXP1, clientPalletYP1, palletwidth, palletHeigth);
+    ctx.fillStyle = "white";
+    ctx.fill();
+    ctx.closePath();
+}
 
-// function drawPallet2() {
-//     ctx.beginPath();
-//     ctx.rect(palletXP2, clientPalletYP2, palletwidth, palletHeigth);
-//     ctx.fillStyle = "white";
-//     ctx.fill();
-//     ctx.closePath();
-// }
+function drawPallet2() {
+    ctx.beginPath();
+    ctx.rect(palletXP2, clientPalletYP2, palletwidth, palletHeigth);
+    ctx.fillStyle = "white";
+    ctx.fill();
+    ctx.closePath();
+}
 
 //      RANDOM STARTING POINT        //
 
@@ -167,8 +165,8 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawField();
     drawBall();
-    // drawPallet1();
-    // drawPallet2();
+    drawPallet1();
+    drawPallet2();
     // collisionDetection();
     // pointMade();
     // movePlayers();
@@ -178,23 +176,23 @@ function draw() {
 //      COLLISION DETECTION       //
 
 // function collisionDetection() {
-    // if (clientX + clientDx > palletXP1 - palletwidth && clientX + clientDx < palletXP1) {
-    //     if (clientY >= clientPalletYP1 - 5 && clientY <= clientPalletYP1 + palletHeigth) {
-    //         randomVelocity();
-    //         clientDx = -clientDx;
-    //     }
-    // } else if (clientX + clientDx > palletXP2 && clientX + clientDx < palletXP2 + palletwidth) {
-    //     if (clientY >= clientPalletYP2 - 5 && clientY <= clientPalletYP2 + palletHeigth) {
-    //         randomVelocity();
-    //         clientDx = -clientDx;
-    //     }
-    // }
-    // if (clientY + clientDy > canvas.height || clientY + clientDy < 0) {
-    //     clientDy = -clientDy;
-    // }
-    // if (clientX + clientDx > canvas.width || clientX + clientDx < 0) {
-    //     clientDx = -clientDx;
-    // }
+// if (clientX + clientDx > palletXP1 - palletwidth && clientX + clientDx < palletXP1) {
+//     if (clientY >= clientPalletYP1 - 5 && clientY <= clientPalletYP1 + palletHeigth) {
+//         randomVelocity();
+//         clientDx = -clientDx;
+//     }
+// } else if (clientX + clientDx > palletXP2 && clientX + clientDx < palletXP2 + palletwidth) {
+//     if (clientY >= clientPalletYP2 - 5 && clientY <= clientPalletYP2 + palletHeigth) {
+//         randomVelocity();
+//         clientDx = -clientDx;
+//     }
+// }
+// if (clientY + clientDy > canvas.height || clientY + clientDy < 0) {
+//     clientDy = -clientDy;
+// }
+// if (clientX + clientDx > canvas.width || clientX + clientDx < 0) {
+//     clientDx = -clientDx;
+// }
 // }
 
 //      CHECK FOR POINTS       //
@@ -310,8 +308,8 @@ socket.on('serverUpdate', function (update) {
         clientY,
         clientDx,
         clientDy,
-        //         clientPalletYP1,
-        //         clientPalletYP2,
+        clientPalletYP1,
+        clientPalletYP2,
         // clientCounterP1,
         // clientCounterP2,
         "server",
@@ -319,8 +317,8 @@ socket.on('serverUpdate', function (update) {
         update.serverY,
         update.serverDx,
         update.serverDy,
-        //         update.serverPalletYP1,
-        //         update.serverPalletYP2,
+        update.serverPalletYP1,
+        update.serverPalletYP2,
         // update.serverScoreP1,
         // update.serverScoreP2,
     );
@@ -331,19 +329,19 @@ socket.on('serverUpdate', function (update) {
     clientY = update.serverY;
     clientDx = update.serverDx;
     clientDy = update.serverDy;
-    //     clientPalletYP1 = update.serverPalletYP1;
-    //     clientPalletYP2 = update.serverPalletYP2;
+    clientPalletYP1 = update.serverPalletYP1;
+    clientPalletYP2 = update.serverPalletYP2;
     // clientCounterP1 = update.serverScoreP1;
     // clientCounterP2 = update.serverScoreP2;
 
-    setTimeout(function(){
+    setTimeout(function () {
         socket.emit('clientUpdate', {
             clientX,
             clientY,
             clientDx,
             clientDy,
-            //         clientPalletYP1,
-            //         clientPalletYP2,
+            clientPalletYP1,
+            clientPalletYP2,
             // clientCounterP1,
             // clientCounterP2
         })

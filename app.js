@@ -32,8 +32,13 @@ let serverY = 250;
 let serverDx = 3;
 let serverDy = 3;
 
-// let serverPalletYP1 = 220;
-// let serverPalletYP2 = 220;
+let serverPalletYP1 = 220;
+let serverPalletYP2 = 220;
+let serverPalletXP1 = 60;
+let serverPalletXP2 = 960;
+let palletwidth = 12;
+let palletHeigth = 100;
+let ballDiameter = 10;
 
 // let serverScoreP1 = 0;
 // let serverScoreP2 = 0;
@@ -74,8 +79,8 @@ function storeClientData(data) {
   serverDx = data.clientDx;
   serverDy = data.clientDy;
 
-  // serverPalletYP1 = data.clientPalletYP1;
-  // serverPalletYP2 = data.clientPalletYP2;
+  serverPalletYP1 = data.clientPalletYP1;
+  serverPalletYP2 = data.clientPalletYP2;
 
   // serverScoreP1 = data.clientCounterP1;
   // serverScoreP2 = data.clientCounterP2;
@@ -86,6 +91,17 @@ function applyLogic() {
   serverX += serverDx;
   serverY += serverDy;
 
+  if (serverX + serverDx > serverPalletXP1 - palletwidth && serverX + serverDx < serverPalletXP1) {
+    if (serverY >= serverPalletYP1 - 5 && serverY <= serverPalletYP1 + palletHeigth) {
+      // randomVelocity();
+      serverDx = -serverDx;
+    }
+  } else if (serverX + serverDx > serverPalletXP2 && serverX + serverDx < serverPalletXP2 + palletwidth) {
+    if (serverY >= serverPalletYP2 - 5 && serverY <= serverPalletYP2 + palletHeigth) {
+      // randomVelocity();
+      serverDx = -serverDx;
+    }
+  }
   if (serverY + serverDy > 490 || serverY + serverDy < 0) {
     serverDy = -serverDy;
   }
@@ -100,8 +116,8 @@ function updateServerPack() {
     serverY: serverY,
     serverDx: serverDx,
     serverDy: serverDy,
-    // serverPalletYP1: serverPalletYP1,
-    // serverPalletYP2: serverPalletYP2,
+    serverPalletYP1: serverPalletYP1,
+    serverPalletYP2: serverPalletYP2,
     // serverScoreP1: serverScoreP1,
     // serverScoreP2: serverScoreP2,
   }

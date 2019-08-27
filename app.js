@@ -45,21 +45,12 @@ io.on('connection', function (socket) {
   i++;
   player_list[socket.id] = ['player' + i];
 
+  updateServerPack();
+  socket.emit('serverUpdate', updatePack);
+
   socket.on('clientUpdate', function (data) {
-    serverX = data.clientX;
-    serverY = data.clientY;
-
-    serverDx = data.clientDx;
-    serverDy = data.clientDy;
-
-    // serverPalletYP1 = data.clientPalletYP1;
-    // serverPalletYP2 = data.clientPalletYP2;
-
-    // serverScoreP1 = data.clientCounterP1;
-    // serverScoreP2 = data.clientCounterP2;
-
-    serverUpdate(data);
-    setTimeout(function(){ socket.emit('serverUpdate', updatePack); }, 1000/60);
+    setTimeout(function () { serverUpdate(data); });
+    setTimeout(function () { socket.emit('serverUpdate', updatePack); }, 10);
   });
 
   socket.on('disconnect', function () {
@@ -67,10 +58,41 @@ io.on('connection', function (socket) {
     delete socket_list[socket.id];
     delete player_list[socket.id];
   });
-
-  updateServerPack();
-  socket.emit('serverUpdate', updatePack);
 });
+
+
+function serverUpdate(data) {
+  storeClientData(data);
+  applyLogic(data);
+  updateServerPack(data);
+}
+
+function storeClientData(data) {
+  serverX = data.clientX;
+  serverY = data.clientY;
+
+  serverDx = data.clientDx;
+  serverDy = data.clientDy;
+
+  // serverPalletYP1 = data.clientPalletYP1;
+  // serverPalletYP2 = data.clientPalletYP2;
+
+  // serverScoreP1 = data.clientCounterP1;
+  // serverScoreP2 = data.clientCounterP2;
+}
+
+
+function applyLogic() {
+  serverX += serverDx;
+  serverY += serverDy;
+
+  if (serverY + serverDy > 490 || serverY + serverDy < 0) {
+    serverDy = -serverDy;
+  }
+  if (serverX + serverDx > 1010 || serverX + serverDx < 0) {
+    serverDx = -serverDx;
+  }
+}
 
 function updateServerPack() {
   updatePack = {
@@ -83,23 +105,4 @@ function updateServerPack() {
     // serverScoreP1: serverScoreP1,
     // serverScoreP2: serverScoreP2,
   }
-}
-
-function applyLogic() {
-  serverX += serverDx;
-  serverY += serverDy;
-
-  if (serverY + serverDy > 500 || serverY + serverDy < 0) {
-    serverDy = -serverDy;
-  }
-  if (serverX + serverDx > 1000 || serverX + serverDx < 0) {
-    serverDx = -serverDx;
-  }
-}
-
-function serverUpdate(data) {
-  applyLogic();
-  // console.log("old", updatePack);
-  updateServerPack();
-  // console.log("new", updatePack);
 }
